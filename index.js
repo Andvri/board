@@ -31,8 +31,8 @@ io.on('connection', function(socket){
     e.username = socket.username;
     socket.broadcast.emit('start',e);
   })
+  
   socket.on('draw', function (e){
-    console.log(socket.username + '  drawing...');
     e.username = socket.username;
     socket.broadcast.emit('draw',e);
   })

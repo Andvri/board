@@ -2,8 +2,8 @@ var c = document.getElementById("board"),
     ctx = c.getContext("2d"),
     click = false,
     buttonClean = document.getElementById("clean");
-
-
+    var color = document.getElementById('color');
+    var width = document.getElementById('width');
 function clean () {
 console.log('clean');
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -11,9 +11,9 @@ console.log('clean');
 }
 function start (e) {
   ctx.beginPath();
-  ctx.strokeStyle = "#fff#";
+  ctx.strokeStyle = e.color || "#fff#";
   ctx.lineCap = "round";
-  ctx.lineWidth = 5;
+  ctx.lineWidth = e.width || 5;
   ctx.moveTo(e.x - c.offsetLeft, e.y - c.offsetTop);
 }
 function draw (e) {
@@ -32,7 +32,9 @@ c.addEventListener('mousedown', function (e){
   click = true;
   let data = {
     x : e.clientX,
-    y : e.clientY
+    y : e.clientY,
+    color: color.value,
+    width: width.value
   }
   socket.emit('start',data);
  
@@ -68,7 +70,6 @@ socket.on('start', function(e){
 
 
 socket.on('draw', function(e){
-  console.log(e);
   draw(e);
 })
 
