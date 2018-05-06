@@ -2,9 +2,7 @@ var c = document.getElementById("board"),
     ctx = c.getContext("2d"),
     click = false,
     buttonClean = document.getElementById("clean");
-ctx.moveTo(0, 0);
-ctx.lineTo(200, 100);
-ctx.stroke(); 
+
 
 function clean () {
 console.log('clean');
@@ -25,14 +23,19 @@ function draw (e) {
 function close (e) {
   ctx.closePath();
 }
-buttonClean.addEventListener("click", clean);
+buttonClean.addEventListener("click",function(){
+  clean();
+  socket.emit('clean');
+}  
+);
 c.addEventListener('mousedown', function (e){
   click = true;
   let data = {
     x : e.clientX,
     y : e.clientY
   }
-  console.log(e);
+  socket.emit('start',data);
+ 
   start(data);
 },false)
 c.addEventListener('mousemove', function (e){
@@ -42,7 +45,8 @@ if(click)
     x : e.clientX,
     y : e.clientY
   }
-  console.log(e);
+  
+  socket.emit('draw',data);
   draw(data);
 }  
 
@@ -53,6 +57,29 @@ let data = {
   x : e.clientX,
   y : e.clientY
 }
-  console.log(e);
+socket.emit('close',data);
 close(data);
 },false)
+
+socket.on('start', function(e){
+  console.log(e);
+  start(e);
+})
+
+
+socket.on('draw', function(e){
+  console.log(e);
+  draw(e);
+})
+
+
+socket.on('close', function(e){
+  console.log(e);
+  close(e);
+})
+
+
+socket.on('clean', function (e){
+  console.log('user: ' + e);
+  clean();
+})
