@@ -1,8 +1,13 @@
 var app = require('express')();
+var express = require('express');
 var http = require('http').Server(app);
+var path = require('path');
+
+app.use(express.static(path.join(__dirname, 'public'))); 
+
 
 app.get('/', function(req, res){
-  res.send('<h1>Hello world</h1>');
+  res.sendFile('index.html');
 });
 
 http.listen(3000, function(){
